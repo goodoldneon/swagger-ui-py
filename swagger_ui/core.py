@@ -45,9 +45,21 @@ class Interface(object):
         )
 
     @property
+    def doc_no_inline_html(self):
+        return self._env.get_template('doc-no-inline.html').render(
+            url_prefix=self._url_prefix, title=self._title, config_url=self._uri('/swagger.json')
+        )
+
+    @property
     def editor_html(self):
         return self._env.get_template('editor.html').render(
             url_prefix=self._url_prefix, title=self._title, config_url=self._uri('/swagger.json')
+        )
+
+    @property
+    def doc_onload_js(self):
+        return self._env.get_template('doc-onload.js').render(
+            config_url=self._uri('/swagger.json')
         )
 
     def _load_config(self, config_str):
@@ -291,7 +303,7 @@ class Interface(object):
 
         class DocHandler(RequestHandler):
             def get(self, *args, **kwargs):
-                return self.write(interface.doc_html)
+                return self.write(interface.doc_no_inline_html)
 
         class EditorHandler(RequestHandler):
             def get(self, *args, **kwargs):
@@ -301,10 +313,16 @@ class Interface(object):
             def get(self, *args, **kwargs):
                 return self.write(interface.get_config(self.request.host))
 
+        class DocOnloadHandler(RequestHandler):
+            def get(self, *args, **kwargs):
+                self.set_header("Content-Type", "application/javascript")
+                return self.write(interface.doc_onload_js)
+
         handlers = [
             (self._uri(), DocHandler),
             (self._uri('/'), DocHandler),
             (self._uri('/swagger.json'), ConfigHandler),
+            (self._uri('/doc-onload.js'), DocOnloadHandler),
             (self._uri('/(.+)'), StaticFileHandler, {'path': self.static_dir}),
         ]
 

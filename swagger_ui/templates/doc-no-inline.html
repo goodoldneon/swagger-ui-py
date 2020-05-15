@@ -1,0 +1,20 @@
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title> {{ title }} </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_prefix }}/swagger-ui.css" >
+    <link rel="stylesheet" type="text/css" href="{{ url_prefix }}/doc.css" >
+    <link rel="icon" type="image/png" href="{{ url_prefix }}/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{ url_prefix }}/favicon-16x16.png" sizes="16x16" />
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+
+    <script src="{{ url_prefix }}/swagger-ui-bundle.js"> </script>
+    <script src="{{ url_prefix }}/swagger-ui-standalone-preset.js"> </script>
+    <script src="{{ url_prefix }}/doc-onload.js"> </script>
+  </body>
+</html>
